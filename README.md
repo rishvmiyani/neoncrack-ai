@@ -156,7 +156,7 @@ web-animation
 
 ---
 
-## 📈 Why This Can Go Viral (50K⭐ Potential)
+## 📈 Why This Can work within Viral ( Potential)
 
 - NASA-grade zxcvbn + quantum simulation
 - Production-ready PWA (actually installable)
@@ -195,7 +195,7 @@ No warranty. Pure cyberpunk vibes.
 </div>
 
 <div align="right">
-
-Made with ❤️ in Cyberpunk City | v6.0  
+  rishv miyani
 
 </div>
+
