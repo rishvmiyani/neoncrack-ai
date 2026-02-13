@@ -1,8 +1,0 @@
-﻿[build]
-  publish = "."
-  command = "echo Cyberpunk ready!"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
