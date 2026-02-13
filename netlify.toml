@@ -1,6 +1,6 @@
 ﻿[build]
   publish = "."
-  command = "echo 'No build needed - Static cyberpunk site!'"
+  command = "echo Cyberpunk ready!"
 
 [[redirects]]
   from = "/*"
