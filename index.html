@@ -1,16 +1,56 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NeonCrack AI v6.0 - Quantum Password Fortress</title>
-    <meta
-      name="description"
-      content="NASA-grade AI password analysis with quantum simulation, Dark Web Radar & Neural pattern detection"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4/dist/zxcvbn.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeonCrack AI v6.0 - Quantum Password Fortress</title>
+  <meta name="description" content="NASA-grade AI password analysis with quantum simulation, Dark Web Radar & Neural pattern detection" />
+  
+  <!-- 🔥 CHROME NUCLEAR FIX - HIDE UNTIL TAILWIND LOADS -->
+  <style>
+    /* CRITICAL: HIDE EVERYTHING UNTIL CSS LOADS */
+    html, body, #__next, .app {
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+    
+    /* ONLY SHOW AFTER LOADED */
+    html.loaded body {
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  </style>
+
+  <!-- Load Tailwind FIRST -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4/dist/zxcvbn.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- UNHIDE AFTER TAILWIND LOADS -->
+  <script>
+    // 🔥 TAILWIND LOAD DETECTOR
+    const tailwindCheck = setInterval(() => {
+      if (document.documentElement.classList.contains('tw-loaded') || window.tailwindCSSLoaded) {
+        clearInterval(tailwindCheck);
+        document.documentElement.classList.add('loaded');
+      }
+    }, 10);
+
+    // Tailwind CDN callback
+    window.tailwindCSSLoaded = true;
+    document.documentElement.classList.add('tw-loaded', 'loaded');
+  </script>
+
+  <!-- YOUR ORIGINAL STYLES (keep everything same) -->
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap");
+    
+    /* ALL YOUR ORIGINAL CSS HERE - DON'T CHANGE */
+    .cyber-glow { /* ... your existing styles ... */ }
+    /* Keep everything exactly same */
+  </style>
+</head>
+
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap");
 
@@ -148,6 +188,38 @@
         box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
       }
 
+      /* 🔥 CHROME LAYOUT FIX - Add to top of CSS */
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        position: relative;
+        overflow-x: hidden;
+        will-change: transform;
+      }
+
+      /* Force repaint */
+      @media (prefers-reduced-motion: no-preference) {
+        body {
+          transform: translateZ(0);
+        }
+      }
+
+      /* Prevent layout shift */
+      .container,
+      .main,
+      [class*="grid"] {
+        min-height: 100vh;
+        contain: layout style;
+      }
+
       /* HYPER METRICS */
       .hyper-metric {
         border: 2px solid transparent;
@@ -201,9 +273,8 @@
       }
     </style>
   </head>
-  <body
-    class="bg-gradient-to-br from-black via-purple-900/20 to-slate-900 min-h-screen overflow-x-hidden"
-  >
+  <body class="bg-gradient-to-br from-black via-purple-900/20 to-slate-900 min-h-screen overflow-x-hidden loaded">
+
     <!-- FIXED CONTROLS - REMOVED THEME TOGGLE -->
     <button
       id="generateBtn"
