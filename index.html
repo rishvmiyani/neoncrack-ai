@@ -14,7 +14,37 @@
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap");
 
-      /* YOUR ORIGINAL STYLES - PERFECT */
+      /* FIXED: Prevent FOUC and layout shifts */
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        visibility: visible !important;
+        height: 100%;
+      }
+
+      body {
+        position: relative;
+        overflow-x: hidden;
+        will-change: transform;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        transform: translateZ(0);
+        visibility: visible !important;
+      }
+
+      /* Force immediate layout */
+      .loaded body,
+      body {
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+
       .cyber-glow {
         text-shadow:
           0 0 5px currentColor,
@@ -85,7 +115,6 @@
         animation: shimmer 2s infinite;
       }
 
-      /* NEW GRAND MASTER FEATURES */
       .quantum-orb {
         width: 80px;
         height: 80px;
@@ -148,39 +177,6 @@
         box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
       }
 
-      /* 🔥 CHROME LAYOUT FIX - Add to top of CSS */
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      body {
-        position: relative;
-        overflow-x: hidden;
-        will-change: transform;
-      }
-
-      /* Force repaint */
-      @media (prefers-reduced-motion: no-preference) {
-        body {
-          transform: translateZ(0);
-        }
-      }
-
-      /* Prevent layout shift */
-      .container,
-      .main,
-      [class*="grid"] {
-        min-height: 100vh;
-        contain: layout style;
-      }
-
-      /* HYPER METRICS */
       .hyper-metric {
         border: 2px solid transparent;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -191,52 +187,26 @@
         transform: translateY(-5px) scale(1.02);
         box-shadow: 0 20px 40px rgba(0, 245, 255, 0.3);
       }
-    </style>
-    <!-- 🔥 CHROME REFLOW FIX - Force clean CSS load -->
-    <meta
-      http-equiv="Cache-Control"
-      content="no-cache, no-store, must-revalidate"
-    />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
 
-    <!-- 💎 FORCE LAYOUT REFLOW -->
-    <script>
-      // Fix Chrome first-load layout bug
-      window.addEventListener("load", () => {
-        document.body.style.visibility = "hidden";
-        requestAnimationFrame(() => {
-          document.body.style.visibility = "visible";
-        });
-      });
-
-      // Force repaint on DOMContentLoaded
-      document.addEventListener("DOMContentLoaded", () => {
-        document.documentElement.classList.add("loaded");
-      });
-    </script>
-
-    <style>
-      /* Prevent FOUC (Flash of Unstyled Content) */
-      html {
-        visibility: hidden;
-      }
-      html.loaded body {
-        visibility: visible;
+      /* Container fixes for Netlify */
+      .container,
+      .main,
+      [class*="grid"] {
+        min-height: 100vh;
+        contain: layout style;
+        width: 100%;
       }
 
-      /* Chrome repaint force */
-      @media screen {
-        body:not(.loaded) {
-          transform: translateZ(0);
-        }
+      /* FIXED: Main content container */
+      .main-content {
+        width: 100vw;
+        max-width: 100%;
+        overflow-x: hidden;
       }
     </style>
   </head>
-  <body
-    class="bg-gradient-to-br from-black via-purple-900/20 to-slate-900 min-h-screen overflow-x-hidden"
-  >
-    <!-- FIXED CONTROLS - REMOVED THEME TOGGLE -->
+  <body class="bg-gradient-to-br from-black via-purple-900/20 to-slate-900 min-h-screen overflow-x-hidden">
+    <!-- FIXED CONTROLS -->
     <button
       id="generateBtn"
       class="generate-btn font-bold text-sm tracking-wide"
@@ -250,9 +220,8 @@
       class="fixed inset-0 -z-10 w-full h-full"
     ></canvas>
 
-    <div
-      class="min-h-screen flex flex-col md:flex-row items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-12 relative pt-24"
-    >
+    <!-- FIXED: Main content with proper layout -->
+    <div class="min-h-screen flex flex-col md:flex-row items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-12 relative pt-24 w-full main-content">
       <!-- Main Card - FULL RESPONSIVE -->
       <div
         class="w-full max-w-4xl mx-auto glass-effect rounded-2xl sm:rounded-3xl lg:rounded-[2rem] p-4 sm:p-6 lg:p-8 xl:p-12 border-2 neon-border shadow-2xl pulse-glow transform transition-all duration-500 hover:scale-[1.01]"
@@ -586,343 +555,360 @@
       </div>
     </div>
 
-    <!-- FIXED JAVASCRIPT - FULLY WORKING -->
+    <!-- FIXED JAVASCRIPT - IMMEDIATE INITIALIZATION -->
     <script>
-      // QUANTUM ANALYSIS ENGINE - FIXED VERSION
-      class NeonCrackAI {
-        constructor() {
-          this.init();
-        }
-
-        init() {
-          this.passwordInput = document.getElementById("passwordInput");
-          this.analyzeBtn = document.getElementById("analyzeBtn");
-          this.results = document.getElementById("results");
-          this.togglePassword = document.getElementById("togglePassword");
-          this.generateBtn = document.getElementById("generateBtn");
-
-          this.initMatrix();
-          this.bindEvents();
-          this.initChart();
-        }
-
-        initMatrix() {
-          const canvas = document.getElementById("matrixCanvas");
-          const ctx = canvas.getContext("2d");
-
-          function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+      // FIXED: Initialize immediately without waiting for events
+      (function() {
+        // Force immediate layout calculation
+        document.documentElement.classList.add('loaded');
+        document.body.style.visibility = 'visible';
+        document.body.style.opacity = '1';
+        
+        // QUANTUM ANALYSIS ENGINE - FIXED VERSION
+        class NeonCrackAI {
+          constructor() {
+            this.init();
           }
 
-          resizeCanvas();
-          window.addEventListener("resize", resizeCanvas);
+          init() {
+            this.passwordInput = document.getElementById("passwordInput");
+            this.analyzeBtn = document.getElementById("analyzeBtn");
+            this.results = document.getElementById("results");
+            this.togglePassword = document.getElementById("togglePassword");
+            this.generateBtn = document.getElementById("generateBtn");
 
-          const chars =
-            "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
-          const fontSize = 14;
-          const columns = canvas.width / fontSize;
-          const drops = Array(Math.floor(columns)).fill(1);
-
-          function draw() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#00f5ff";
-            ctx.font = `${fontSize}px monospace`;
-
-            drops.forEach((y, i) => {
-              const text = chars[Math.floor(Math.random() * chars.length)];
-              ctx.fillText(text, i * fontSize, y * fontSize);
-
-              if (y * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-              }
-              drops[i]++;
+            // FIXED: Initialize everything immediately
+            this.initMatrix();
+            this.initChart();
+            this.bindEvents();
+            
+            // Force layout recalculation
+            requestAnimationFrame(() => {
+              document.body.classList.add('loaded');
             });
           }
 
-          setInterval(draw, 50);
-        }
+          initMatrix() {
+            const canvas = document.getElementById("matrixCanvas");
+            const ctx = canvas.getContext("2d");
 
-        bindEvents() {
-          // Toggle password visibility
-          this.togglePassword.addEventListener("click", () => {
-            const type =
-              this.passwordInput.getAttribute("type") === "password"
-                ? "text"
-                : "password";
-            this.passwordInput.setAttribute("type", type);
-          });
+            function resizeCanvas() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+            }
 
-          // Analyze button - FIXED
-          this.analyzeBtn.addEventListener("click", () =>
-            this.analyzePassword(),
-          );
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
 
-          // Enter key
-          this.passwordInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") this.analyzePassword();
-          });
+            const chars =
+              "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
 
-          // Live preview
-          this.passwordInput.addEventListener(
-            "input",
-            this.debounce((e) => {
-              const result = this.analyze(e.target.value);
-              this.updateLivePreview(result);
-            }, 300),
-          );
+            function draw() {
+              ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.fillStyle = "#00f5ff";
+              ctx.font = `${fontSize}px monospace`;
 
-          // Generate button
-          this.generateBtn.addEventListener("click", () => {
-            const strongPass = this.generateSecurePassword();
-            this.passwordInput.value = strongPass;
-            this.analyzePassword();
-          });
-        }
+              drops.forEach((y, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
 
-        generateSecurePassword() {
-          const chars =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
-          let pass = "";
-          for (let i = 0; i < 24; i++) {
-            pass += chars[Math.floor(Math.random() * chars.length)];
-          }
-          return pass;
-        }
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                  drops[i] = 0;
+                }
+                drops[i]++;
+              });
+            }
 
-        analyze(password) {
-          if (!password) return { score: 0, entropy: 0 };
-
-          // Use zxcvbn library
-          const zxcvbnResult =
-            typeof zxcvbn !== "undefined"
-              ? zxcvbn(password)
-              : { score: 0, entropy: 0 };
-
-          // Custom quantum analysis
-          const quantumScore = this.quantumScore(password);
-          const socialRisk = this.socialRiskScore(password);
-
-          return {
-            score: Math.round(
-              (zxcvbnResult.score * 0.7 + quantumScore * 0.3) * 25,
-            ),
-            entropy: zxcvbnResult.entropy || 0,
-            crackTime:
-              zxcvbnResult.crack_times_display
-                ?.offline_fast_hashing_1e10_per_second || "Instant",
-            composition: this.getComposition(password),
-            socialRisk: socialRisk,
-            quantumSafe: this.quantumSafeScore(zxcvbnResult.entropy || 0),
-            diamond: this.getDiamondRating(zxcvbnResult.score || 0),
-            warnings:
-              zxcvbnResult.feedback?.warning || "Strong password detected!",
-          };
-        }
-
-        quantumScore(password) {
-          let score = 0;
-          if (password.length >= 16) score += 1;
-          if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score += 1;
-          if (/\d/.test(password)) score += 1;
-          if (/[^A-Za-z0-9]/.test(password)) score += 1;
-          if (!/(.)\1/.test(password)) score += 1; // No repeats
-          return Math.min(4, score);
-        }
-
-        socialRiskScore(password) {
-          const risky = [
-            "123",
-            "abc",
-            "qwe",
-            "asd",
-            password.slice(0, 3).toLowerCase(),
-          ];
-          return Math.max(
-            0,
-            100 -
-              risky.filter((p) => password.toLowerCase().includes(p)).length *
-                25,
-          );
-        }
-
-        quantumSafeScore(entropy) {
-          return entropy > 80 ? "∞" : Math.pow(2, entropy / 2).toExponential(0);
-        }
-
-        getDiamondRating(score) {
-          if (score >= 3)
-            return { letter: "A", label: "FORTRESS", color: "emerald-400" };
-          if (score >= 2)
-            return { letter: "B", label: "STRONG", color: "yellow-400" };
-          if (score >= 1)
-            return { letter: "C", label: "MEDIUM", color: "orange-400" };
-          return { letter: "F", label: "CRITICAL", color: "red-400" };
-        }
-
-        getComposition(password) {
-          return {
-            lower: (password.match(/[a-z]/g) || []).length,
-            upper: (password.match(/[A-Z]/g) || []).length,
-            numbers: (password.match(/\d/g) || []).length,
-            symbols: (password.match(/[^A-Za-z0-9]/g) || []).length,
-          };
-        }
-
-        async analyzePassword() {
-          const password = this.passwordInput.value.trim();
-          if (!password) {
-            alert("Please enter a password first!");
-            return;
+            setInterval(draw, 50);
           }
 
-          // Loading state
-          this.analyzeBtn.disabled = true;
-          document.getElementById("btnIcon").textContent = "⚛️";
-          document.getElementById("btnText").textContent =
-            "QUANTUM SCANNING...";
+          bindEvents() {
+            // Toggle password visibility
+            this.togglePassword.addEventListener("click", () => {
+              const type =
+                this.passwordInput.getAttribute("type") === "password"
+                  ? "text"
+                  : "password";
+              this.passwordInput.setAttribute("type", type);
+            });
 
-          const result = this.analyze(password);
+            // Analyze button - FIXED
+            this.analyzeBtn.addEventListener("click", () =>
+              this.analyzePassword(),
+            );
 
-          // Animate results
-          await this.animateResults(result);
+            // Enter key
+            this.passwordInput.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") this.analyzePassword();
+            });
 
-          // Show results
-          this.results.classList.remove("hidden");
-          document.getElementById("quantumOrb").classList.remove("hidden");
+            // Live preview
+            this.passwordInput.addEventListener(
+              "input",
+              this.debounce((e) => {
+                const result = this.analyze(e.target.value);
+                this.updateLivePreview(result);
+              }, 300),
+            );
 
-          // Reset button
-          setTimeout(() => {
-            this.analyzeBtn.disabled = false;
-            document.getElementById("btnIcon").textContent = "✅";
-            document.getElementById("btnText").textContent = "FORTRESS SECURED";
-          }, 2000);
-        }
-
-        async animateResults(result) {
-          // Animate score
-          document.getElementById("scoreDisplay").textContent = "0%";
-          for (let i = 0; i <= result.score; i += 5) {
-            await new Promise((r) => setTimeout(r, 30));
-            document.getElementById("scoreDisplay").textContent = `${i}%`;
+            // Generate button
+            this.generateBtn.addEventListener("click", () => {
+              const strongPass = this.generateSecurePassword();
+              this.passwordInput.value = strongPass;
+              this.analyzePassword();
+            });
           }
 
-          // Update all metrics
-          document.getElementById("entropyDisplay").textContent =
-            result.entropy;
-          document.getElementById("crackTimeDisplay").textContent =
-            result.crackTime;
-          document.getElementById("quantumTime").textContent =
-            result.quantumSafe;
-          document.getElementById("socialRisk").textContent = result.socialRisk;
+          generateSecurePassword() {
+            const chars =
+              "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+            let pass = "";
+            for (let i = 0; i < 24; i++) {
+              pass += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return pass;
+          }
 
-          // Diamond rating
-          const diamond = result.diamond;
-          document.getElementById("ratingLetter").textContent = diamond.letter;
-          document.getElementById("ratingLabel").textContent = diamond.label;
-          document.getElementById("ratingLetter").className =
-            `text-5xl font-black font-[Orbitron] bg-gradient-to-r from-${diamond.color} to-yellow-500 bg-clip-text text-transparent`;
+          analyze(password) {
+            if (!password) return { score: 0, entropy: 0 };
 
-          // Quick metrics
-          document.getElementById("quickRating").textContent = diamond.letter;
-          document.getElementById("quickRating").className =
-            `text-2xl font-black text-${diamond.color} font-[Orbitron]`;
+            // Use zxcvbn library
+            const zxcvbnResult =
+              typeof zxcvbn !== "undefined"
+                ? zxcvbn(password)
+                : { score: 0, entropy: 0 };
 
-          // HIBP simulation
-          setTimeout(() => {
-            document.getElementById("hibpResult").innerHTML =
-              result.socialRisk < 50
-                ? '<span class="text-red-400 font-bold animate-pulse">🚨 COMPROMISED!</span><br><span class="text-orange-400">25M+ known appearances</span>'
-                : '<span class="text-emerald-400 font-bold">✅ CLEAN</span><br><span class="text-emerald-300">No Dark Web leaks</span>';
-            document.getElementById("darkWebStatus").textContent =
-              result.socialRisk < 50 ? "🔴" : "🟢";
-            document.getElementById("darkWebText").textContent =
-              result.socialRisk < 50 ? "COMPROMISED" : "SECURE";
-          }, 1000);
+            // Custom quantum analysis
+            const quantumScore = this.quantumScore(password);
+            const socialRisk = this.socialRiskScore(password);
 
-          // AI explanation
-          document.getElementById("aiExplanation").textContent =
-            this.generateAIExplanation(result);
+            return {
+              score: Math.round(
+                (zxcvbnResult.score * 0.7 + quantumScore * 0.3) * 25,
+              ),
+              entropy: zxcvbnResult.entropy || 0,
+              crackTime:
+                zxcvbnResult.crack_times_display
+                  ?.offline_fast_hashing_1e10_per_second || "Instant",
+              composition: this.getComposition(password),
+              socialRisk: socialRisk,
+              quantumSafe: this.quantumSafeScore(zxcvbnResult.entropy || 0),
+              diamond: this.getDiamondRating(zxcvbnResult.score || 0),
+              warnings:
+                zxcvbnResult.feedback?.warning || "Strong password detected!",
+            };
+          }
 
-          // Update chart
-          this.updateCompositionChart(result.composition);
+          quantumScore(password) {
+            let score = 0;
+            if (password.length >= 16) score += 1;
+            if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score += 1;
+            if (/\d/.test(password)) score += 1;
+            if (/[^A-Za-z0-9]/.test(password)) score += 1;
+            if (!/(.)\\1/.test(password)) score += 1; // No repeats
+            return Math.min(4, score);
+          }
 
-          // Crack time bar
-          const crackBar = document.getElementById("crackTimeBar");
-          crackBar.style.width = `${Math.min(100, result.score * 1.2)}%`;
-        }
+          socialRiskScore(password) {
+            const risky = [
+              "123",
+              "abc",
+              "qwe",
+              "asd",
+              password.slice(0, 3).toLowerCase(),
+            ];
+            return Math.max(
+              0,
+              100 -
+                risky.filter((p) => password.toLowerCase().includes(p)).length *
+                  25,
+            );
+          }
 
-        generateAIExplanation(result) {
-          const warnings = [
-            `🧠 TRIPLE NEURAL ANALYSIS COMPLETE`,
-            `📊 Score: ${result.score}% (${result.diamond.letter} Rating)`,
-            `⚛️ Entropy: ${result.entropy} bits (${result.quantumSafe === "∞" ? "QUANTUM RESISTANT" : "VULNERABLE"})`,
-            `🎯 Social Risk: ${result.socialRisk}/100`,
-            ``,
-            `💡 ${result.warnings}`,
-            `🔧 FIX: ${result.score < 50 ? "Add uppercase, numbers, symbols. Use 16+ chars." : "Excellent! Consider passphrase format."}`,
-          ];
-          return warnings.join("\n");
-        }
+          quantumSafeScore(entropy) {
+            return entropy > 80 ? "∞" : Math.pow(2, entropy / 2).toExponential(0);
+          }
 
-        updateLivePreview(result) {
-          if (result.score > 0) {
-            document.getElementById("scoreDisplay").textContent =
-              `${result.score}%`;
+          getDiamondRating(score) {
+            if (score >= 3)
+              return { letter: "A", label: "FORTRESS", color: "emerald-400" };
+            if (score >= 2)
+              return { letter: "B", label: "STRONG", color: "yellow-400" };
+            if (score >= 1)
+              return { letter: "C", label: "MEDIUM", color: "orange-400" };
+            return { letter: "F", label: "CRITICAL", color: "red-400" };
+          }
+
+          getComposition(password) {
+            return {
+              lower: (password.match(/[a-z]/g) || []).length,
+              upper: (password.match(/[A-Z]/g) || []).length,
+              numbers: (password.match(/\d/g) || []).length,
+              symbols: (password.match(/[^A-Za-z0-9]/g) || []).length,
+            };
+          }
+
+          async analyzePassword() {
+            const password = this.passwordInput.value.trim();
+            if (!password) {
+              alert("Please enter a password first!");
+              return;
+            }
+
+            // Loading state
+            this.analyzeBtn.disabled = true;
+            document.getElementById("btnIcon").textContent = "⚛️";
+            document.getElementById("btnText").textContent =
+              "QUANTUM SCANNING...";
+
+            const result = this.analyze(password);
+
+            // Animate results
+            await this.animateResults(result);
+
+            // Show results
+            this.results.classList.remove("hidden");
+            document.getElementById("quantumOrb").classList.remove("hidden");
+
+            // Reset button
+            setTimeout(() => {
+              this.analyzeBtn.disabled = false;
+              document.getElementById("btnIcon").textContent = "✅";
+              document.getElementById("btnText").textContent = "FORTRESS SECURED";
+            }, 2000);
+          }
+
+          async animateResults(result) {
+            // Animate score
+            document.getElementById("scoreDisplay").textContent = "0%";
+            for (let i = 0; i <= result.score; i += 5) {
+              await new Promise((r) => setTimeout(r, 30));
+              document.getElementById("scoreDisplay").textContent = `${i}%`;
+            }
+
+            // Update all metrics
             document.getElementById("entropyDisplay").textContent =
               result.entropy;
+            document.getElementById("crackTimeDisplay").textContent =
+              result.crackTime;
+            document.getElementById("quantumTime").textContent =
+              result.quantumSafe;
+            document.getElementById("socialRisk").textContent = result.socialRisk;
+
+            // Diamond rating
+            const diamond = result.diamond;
+            document.getElementById("ratingLetter").textContent = diamond.letter;
+            document.getElementById("ratingLabel").textContent = diamond.label;
+            document.getElementById("ratingLetter").className =
+              `text-5xl font-black font-[Orbitron] bg-gradient-to-r from-${diamond.color} to-yellow-500 bg-clip-text text-transparent`;
+
+            // Quick metrics
+            document.getElementById("quickRating").textContent = diamond.letter;
+            document.getElementById("quickRating").className =
+              `text-2xl font-black text-${diamond.color} font-[Orbitron]`;
+
+            // HIBP simulation
+            setTimeout(() => {
+              document.getElementById("hibpResult").innerHTML =
+                result.socialRisk < 50
+                  ? '<span class="text-red-400 font-bold animate-pulse">🚨 COMPROMISED!</span><br><span class="text-orange-400">25M+ known appearances</span>'
+                  : '<span class="text-emerald-400 font-bold">✅ CLEAN</span><br><span class="text-emerald-300">No Dark Web leaks</span>';
+              document.getElementById("darkWebStatus").textContent =
+                result.socialRisk < 50 ? "🔴" : "🟢";
+              document.getElementById("darkWebText").textContent =
+                result.socialRisk < 50 ? "COMPROMISED" : "SECURE";
+            }, 1000);
+
+            // AI explanation
+            document.getElementById("aiExplanation").textContent =
+              this.generateAIExplanation(result);
+
+            // Update chart
+            this.updateCompositionChart(result.composition);
+
+            // Crack time bar
+            const crackBar = document.getElementById("crackTimeBar");
+            crackBar.style.width = `${Math.min(100, result.score * 1.2)}%`;
+          }
+
+          generateAIExplanation(result) {
+            const warnings = [
+              `🧠 TRIPLE NEURAL ANALYSIS COMPLETE`,
+              `📊 Score: ${result.score}% (${result.diamond.letter} Rating)`,
+              `⚛️ Entropy: ${result.entropy} bits (${result.quantumSafe === "∞" ? "QUANTUM RESISTANT" : "VULNERABLE"})`,
+              `🎯 Social Risk: ${result.socialRisk}/100`,
+              ``,
+              `💡 ${result.warnings}`,
+              `🔧 FIX: ${result.score < 50 ? "Add uppercase, numbers, symbols. Use 16+ chars." : "Excellent! Consider passphrase format."}`,
+            ];
+            return warnings.join("\n");
+          }
+
+          updateLivePreview(result) {
+            if (result.score > 0) {
+              document.getElementById("scoreDisplay").textContent =
+                `${result.score}%`;
+              document.getElementById("entropyDisplay").textContent =
+                result.entropy;
+            }
+          }
+
+          initChart() {
+            const ctx = document
+              .getElementById("compositionChart")
+              .getContext("2d");
+            this.compositionChart = new Chart(ctx, {
+              type: "doughnut",
+              data: {
+                labels: ["Lower", "Upper", "Numbers", "Symbols"],
+                datasets: [
+                  {
+                    data: [0, 0, 0, 0],
+                    backgroundColor: ["#00f5ff", "#ff00ff", "#00ff88", "#ffaa00"],
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                cutout: "60%",
+              },
+            });
+          }
+
+          updateCompositionChart(composition) {
+            const total = Object.values(composition).reduce((a, b) => a + b, 0);
+            this.compositionChart.data.datasets[0].data = [
+              composition.lower,
+              composition.upper,
+              composition.numbers,
+              composition.symbols,
+            ];
+            this.compositionChart.update("none");
+          }
+
+          debounce(fn, ms) {
+            let timer;
+            return (...args) => {
+              clearTimeout(timer);
+              timer = setTimeout(() => fn(...args), ms);
+            };
           }
         }
 
-        initChart() {
-          const ctx = document
-            .getElementById("compositionChart")
-            .getContext("2d");
-          this.compositionChart = new Chart(ctx, {
-            type: "doughnut",
-            data: {
-              labels: ["Lower", "Upper", "Numbers", "Symbols"],
-              datasets: [
-                {
-                  data: [0, 0, 0, 0],
-                  backgroundColor: ["#00f5ff", "#ff00ff", "#00ff88", "#ffaa00"],
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { display: false } },
-              cutout: "60%",
-            },
-          });
-        }
-
-        updateCompositionChart(composition) {
-          const total = Object.values(composition).reduce((a, b) => a + b, 0);
-          this.compositionChart.data.datasets[0].data = [
-            composition.lower,
-            composition.upper,
-            composition.numbers,
-            composition.symbols,
-          ];
-          this.compositionChart.update("none");
-        }
-
-        debounce(fn, ms) {
-          let timer;
-          return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => fn(...args), ms);
-          };
-        }
-      }
-
-      // Initialize on load
-      document.addEventListener("DOMContentLoaded", () => {
+        // FIXED: Initialize immediately - NO DOMContentLoaded needed
         new NeonCrackAI();
-      });
+
+        // Force final layout fix
+        requestAnimationFrame(() => {
+          document.documentElement.classList.add('js-loaded');
+        });
+      })();
     </script>
   </body>
 </html>
